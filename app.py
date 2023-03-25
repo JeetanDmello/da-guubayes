@@ -13,7 +13,7 @@ app.config['SECRET_KEY'] = '\xfd{H\xe5<\x95\xf9\xe3\x96.5\xd1\x01O<!\xd5\xa2\xa0
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app.config.update(
-    UPLOADED_PATH= os.path.join(basedir,'posted'),
+    UPLOADED_PATH= os.path.join(basedir,'static/posted'),
     DROPZONE_MAX_FILE_SIZE = 1024,
     DROPZONE_TIMEOUT = 5*60*1000)
 dropzone = Dropzone(app)
@@ -90,15 +90,15 @@ def login():
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
-    dir='posted'
+    dir='static/posted'
     for f in os.listdir(dir):
         os.remove(os.path.join(dir, f))
     user_id = request.cookies.get('SessionCookie')
     
     if request.method == 'POST':
         f = request.files.get('file')
-        f.save(os.path.join(app.config['UPLOADED_PATH'],f.filename))
-        return redirect(url_for('result'))
+        f.save(os.path.join(app.config['UPLOADED_PATH'],"hello.png"))
+        
     return render_template('home.html')
 
 
