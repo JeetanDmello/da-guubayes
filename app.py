@@ -90,16 +90,21 @@ def login():
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
+    dir='posted'
+    for f in os.listdir(dir):
+        os.remove(os.path.join(dir, f))
     user_id = request.cookies.get('SessionCookie')
-    if user_id in session:
-        if request.method == 'POST':
-            f = request.files.get('file')
-            f.save(os.path.join(app.config['UPLOADED_PATH'],f.filename))
-        return render_template('home.html')
-    else:
-       return redirect(url_for('login'))
+    
+    if request.method == 'POST':
+        f = request.files.get('file')
+        f.save(os.path.join(app.config['UPLOADED_PATH'],f.filename))
+        return redirect(url_for('result'))
+    return render_template('home.html')
 
 
+@app.route('/result', methods=['GET', 'POST'])
+def result():
+    return render_template('result.html')
 
 if __name__ == '__main__':
     app.run(host = "0.0.0.0", debug=True)
